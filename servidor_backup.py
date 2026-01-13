@@ -1,8 +1,9 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+import os
 
-HOST = "localhost"
-PUERTO = 8000
+HOST = "0.0.0.0"
+PUERTO = int(os.environ.get("PORT", 10000))
 
 reservas = []
 
@@ -11,35 +12,23 @@ HTML = """
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>PAOLA TAIPE PABLO VELAZCO</title>
-<title>Reserva de Cancha</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>Cancha de Vóley</title>
 <style>
-body{background:#eaf6ff}
-.card{margin-top:80px}
+body{font-family:Arial;background:#e3f2fd}
+.card{background:white;width:420px;margin:80px auto;padding:20px;border-radius:10px}
+button,input{width:100%;padding:10px;margin-top:10px}
+li{background:#bbdefb;margin-top:5px;padding:5px;border-radius:5px}
 </style>
 </head>
 <body>
 
-<div class="container">
-<div class="row justify-content-center">
-<div class="col-md-5">
-<div class="card shadow rounded-4">
-<div class="card-body">
-<h4 class="text-center mb-3">🏐 Reserva de Cancha de Vóley</h4>
-
-<input id="nombre" class="form-control mb-2" placeholder="Nombre del equipo">
-<input id="hora" class="form-control mb-3" placeholder="Hora (ej: 5 a 6)">
-
-<button class="btn btn-success w-100 mb-2" onclick="reservar()">Reservar</button>
-<button class="btn btn-primary w-100 mb-3" onclick="ver()">Ver reservas</button>
-
-<ul id="lista" class="list-group"></ul>
-
-</div>
-</div>
-</div>
-</div>
+<div class="card">
+<h2>🏐 Reserva de Cancha de Vóley</h2>
+<input id="nombre" placeholder="Nombre del equipo">
+<input id="hora" placeholder="Hora (ej: 4pm - 5pm)">
+<button onclick="reservar()">Reservar cancha</button>
+<button onclick="ver()">Ver reservas</button>
+<ul id="lista"></ul>
 </div>
 
 <script>
@@ -60,8 +49,7 @@ fetch("/reservas")
 .then(d=>{
 lista.innerHTML=""
 d.forEach(x=>{
-li=document.createElement("li")
-li.className="list-group-item"
+let li=document.createElement("li")
 li.textContent=x.equipo+" - "+x.hora
 lista.appendChild(li)
 })
@@ -78,9 +66,9 @@ class Servidor(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
             self.send_response(200)
-            self.send_header("Content-Type","text/html")
+            self.send_header("Content-Type","text/html; charset=utf-8")
             self.end_headers()
-            self.wfile.write(HTML.encode())
+            self.wfile.write(HTML.encode("utf-8"))
 
         elif self.path == "/reservas":
             self.send_response(200)
@@ -99,5 +87,6 @@ class Servidor(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b"Reserva registrada correctamente")
 
-print("Servidor activo http://localhost:8000")
+print(f"Servidor activo en puerto {PUERTO}")
 HTTPServer((HOST, PUERTO), Servidor).serve_forever()
+
