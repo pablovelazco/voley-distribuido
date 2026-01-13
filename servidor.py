@@ -11,7 +11,7 @@ HTML = """
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>PAOLA TAIPE PABLO VELAZCO</title>
+
 <title>Reserva de Cancha</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
@@ -27,6 +27,7 @@ body{background:#eaf6ff}
 <div class="card shadow rounded-4">
 <div class="card-body">
 <h4 class="text-center mb-3">🏐 Reserva de Cancha de Vóley</h4>
+<h4 class="text-center mb-3">🏐 PAOLA TAYPE</h4>
 
 <input id="nombre" class="form-control mb-2" placeholder="Nombre del equipo">
 <input id="hora" class="form-control mb-3" placeholder="Hora (ej: 5 a 6)">
